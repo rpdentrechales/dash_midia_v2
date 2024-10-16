@@ -7,6 +7,7 @@ from datetime import datetime
 
 st.set_page_config(page_title="Pró-Corpo - Acompanhamento", page_icon="💎",layout="wide")
 
+# Calcula dias até o final do mês
 def days_until_end_of_month(period):
     today = datetime.today()
 
@@ -17,7 +18,7 @@ def days_until_end_of_month(period):
     else:
         return None
 
-
+# Carrega os dados do sheets, remove duplicadas e atualiza a planilha.
 @st.cache_data
 def load_main_dataframe(worksheet):
 
@@ -34,6 +35,7 @@ def load_main_dataframe(worksheet):
 
   return df
 
+# Carrega os dados do sheets, remove duplicadas e retorna um dataframe
 @st.cache_data
 def load_aux_dataframe(worksheet,duplicates_subset):
 
@@ -43,15 +45,19 @@ def load_aux_dataframe(worksheet,duplicates_subset):
 
   return df
 
+# Carrega os dados das plataformas de mídia
 df_fb = load_main_dataframe("Compilado - FB e Gads")
 
+# Carrega os de-paras de unidade e categoria de FB
 df_categorias = load_aux_dataframe("Auxiliar - Categorias - FB","Anuncio")
 df_unidades = load_aux_dataframe("Auxiliar - Unidades - FB","Campaign Name")
 df_whatsapp = load_aux_dataframe("Auxiliar - Whatsapp - FB","Ad Name")
 
+# Carrega os dados de meta
 df_metas_categoria = load_aux_dataframe("aux - Configurar metas categoria",["plataforma","month","categoria"])
 df_metas_unidade = load_aux_dataframe("aux - Configurar metas unidade",["unidade","month"])
 
+# Padroniza as datas nos dataframes das metas
 df_metas_unidade['month'] = pd.to_datetime(df_metas_unidade['month'])
 df_metas_unidade['month'] = df_metas_unidade['month'].dt.to_period('M')
 
@@ -96,6 +102,13 @@ if (month_filter):
   df_meta_categoria_mes = df_metas_categoria.loc[df_metas_categoria['month'] == month_filter]
   df_meta_unidade_mes = df_metas_unidade.loc[df_metas_unidade['month'] == month_filter]
   df_metas_categoria_mes = df_metas_categoria.loc[df_metas_categoria['month'] == month_filter]
+
+  # Verifica se há metas para o mês selecionado. Se não houver, copia as metas do mês anterior.
+
+  if len(df_meta_categoria_mes) == 0:
+    pass
+
+  st.markdown(f"## {type(month_filter)} - {month_filter}")
 
 if (store_filter):
   df_filtered = df_sem_cirurgia.loc[df_sem_cirurgia['Unidade'] == store_filter]
@@ -209,65 +222,4 @@ st.dataframe(
         )
     }
     ,hide_index = True
-  )
-
-st.markdown("## Facebook - Total por categoria")
-
-total_groupby = df_sem_cirurgia.groupby(["Categoria"]).agg({"Results":"sum","Amount Spent":"sum"})
-total_groupby = total_groupby.reset_index()
-total_groupby["CPL"] = total_groupby["Amount Spent"]/total_groupby["Results"]
-
-total_row = pd.DataFrame(total_groupby[['Results', 'Amount Spent']].sum()).transpose()
-total_row["CPL"] = total_row['Amount Spent']/total_row['Results']
-
-total_resultados = total_row['Results'].values[0]
-total_custo = total_row['Amount Spent'].values[0]
-total_cpl = total_row['CPL'].values[0]
-
-total_groupby["share_custo"] = (total_groupby["Amount Spent"]/total_custo) * 100
-total_groupby["share_resultados"] = (total_groupby["Results"]/total_resultados) * 100
-
-metrics_1,metrics_2,metrics_3 = st.columns(3)
-
-with metrics_1:
-  st.metric("Resultados Total",f"{total_resultados :.0f}")
-with metrics_2:
-  st.metric("Custo Total",f"R$ {total_custo :.2f}")
-with metrics_3:
-  st.metric("CPL Total",f"R$ {total_cpl :.2f}")
-
-st.dataframe(
-    total_groupby,
-    use_container_width=True,
-    column_config={
-        "Amount Spent": st.column_config.NumberColumn(
-            "Custo",
-            format="R$ %.2f",
-            width="small"
-        ),
-        "CPL": st.column_config.NumberColumn(
-            "CPL",
-            format="R$ %.2f",
-            width="small"
-        ),
-        "Categoria": st.column_config.Column(
-            "Categoria",
-            width="large"
-        ),
-        "Results": st.column_config.NumberColumn(
-            "Resultados",
-            width="small"
-        ),
-        "share_custo": st.column_config.NumberColumn(
-            "Share Custo (%)",
-            format="%.2f %%",
-            width="small"
-        ),
-        "share_resultados": st.column_config.NumberColumn(
-            "Share Resultados (%)",
-            format="%.2f %%",
-            width="small"
-        )
-    },
-    hide_index = True
   )
