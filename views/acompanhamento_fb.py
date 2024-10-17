@@ -179,11 +179,11 @@ else:
   categoria_groupby["verba restante por dia"] = 0
 
 colunas = ["categoria","meta","Amount Spent","Results","CPL","share_custo","share_resultados","verba total","verba restante","verba restante por dia"]
-display_categoria_df = categoria_groupby[colunas]
 
 st.data_editor(
-    display_categoria_df,
+    categoria_groupby,
     use_container_width=True,
+    column_order=colunas,
     column_config={
         "meta": st.column_config.NumberColumn(
             "Meta",
