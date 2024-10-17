@@ -17,11 +17,12 @@ data = {
 # Create a DataFrame
 df = pd.DataFrame(data)
 
-# Use st.data_editor to allow editing columns A and B
-edited_df = st.data_editor(df, num_rows="dynamic")
+# Use st.data_editor to allow editing columns A and B, provide a unique key
+edited_df = st.data_editor(df, num_rows="dynamic", key="unique_editor")
 
 # Recalculate column C based on the updated values in columns A and B
 edited_df['C'] = edited_df['A'] * edited_df['B']
 
-# Display the recalculated dataframe in the same editor
-st.data_editor(edited_df, num_rows="dynamic")
+# Display the recalculated dataframe in the same editor, with the same unique key
+st.data_editor(edited_df, num_rows="dynamic", key="unique_editor_updated")
+
