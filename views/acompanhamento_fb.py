@@ -241,5 +241,7 @@ tabela_acompanhamento = st.data_editor(
   )
 
 meta_updated = tabela_acompanhamento[["categoria","meta"]]
+meta_updated["unidade"] = store_filter
+meta_updated["plataforma"] = "Facebook"
 
 st.write(meta_updated)
