@@ -181,7 +181,7 @@ else:
 colunas = ["categoria","meta","Amount Spent","Results","CPL","share_custo","share_resultados","verba total","verba restante","verba restante por dia"]
 display_categoria_df = categoria_groupby[colunas]
 
-st.dataframe(
+st.data_editor(
     display_categoria_df,
     use_container_width=True,
     column_config={
