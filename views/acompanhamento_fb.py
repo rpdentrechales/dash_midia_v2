@@ -45,8 +45,19 @@ def load_aux_dataframe(worksheet,duplicates_subset):
 
   return df
 
+def update_sheet(df,worksheet):
+
+  conn = st.connection("gsheets", type=GSheetsConnection)
+  df = conn.read(worksheet=worksheet,dtype={"Ad ID": str})
+
+  df = df.drop_duplicates(keep="last")
+  conn.update(data=df,worksheet=worksheet)
+
+  return df
+
 # Carrega os dados das plataformas de mídia
 df_fb = load_main_dataframe("Compilado - FB e Gads")
+df_fb = df_fb.loc[df_fb["Plataforma"] == "Facebook"]
 
 # Carrega os de-paras de unidade e categoria de FB
 df_categorias = load_aux_dataframe("Auxiliar - Categorias - FB","Anuncio")
@@ -99,25 +110,24 @@ store_filter = st.selectbox(label = "Selecione a Unidade",
 
 if (month_filter):
   df_sem_cirurgia = df_sem_cirurgia.loc[df_sem_cirurgia['month'] == month_filter]
-  df_meta_categoria_mes = df_metas_categoria.loc[df_metas_categoria['month'] == month_filter]
   df_meta_unidade_mes = df_metas_unidade.loc[df_metas_unidade['month'] == month_filter]
-  df_metas_categoria_mes = df_metas_categoria.loc[df_metas_categoria['month'] == month_filter]
 
   # Verifica se há metas para o mês selecionado. Se não houver, copia as metas do mês anterior.
 
-  if len(df_meta_categoria_mes) == 0:
-    pass
-
-  st.markdown(f"## {type(month_filter)} - {month_filter}")
+  if len(df_meta_unidade_mes) == 0:
+    df_meta_unidade_mes_to_add = df_metas_unidade.loc[df_metas_unidade['month'] == month_filter - 1]
+    df_meta_unidade_mes_to_add["month"] = month_filter
+    if len(df_meta_unidade_mes_to_add) > 0:
+      df_metas_unidade = pd.concat([df_metas_unidade,df_meta_unidade_mes_to_add])
+      df_metas_unidade = update_sheet(df_metas_unidade,"aux - Configurar metas unidade")
 
 if (store_filter):
   df_filtered = df_sem_cirurgia.loc[df_sem_cirurgia['Unidade'] == store_filter]
-  meta_selecionada = df_meta_unidade_mes.loc[df_meta_unidade_mes['unidade'] == store_filter]
+  meta_unidade_selecionada = df_meta_unidade_mes.loc[df_meta_unidade_mes['unidade'] == store_filter]
+  meta_categoria_selecionada = df_metas_categoria.loc[df_metas_categoria['unidade'] == store_filter]
 
-meta_facebook_mes = meta_selecionada["meta facebook"].values[0]
-df_metas_categoria_mes = df_metas_categoria_mes.loc[df_metas_categoria["plataforma"] == "Facebook"]
-
-df_metas_categoria_mes["meta"] = df_metas_categoria_mes["meta"]/100
+meta_facebook_mes = meta_unidade_selecionada["meta facebook"].values[0]
+meta_categoria_fb = meta_categoria_selecionada.loc[meta_categoria_selecionada["plataforma"] == "Facebook"]
 
 metrics_unidade_1,metrics_unidade_2,metrics_unidade_3,metrics_unidade_4,metrics_unidade_5,metrics_unidade_6 = st.columns(6)
 
@@ -127,6 +137,7 @@ total_unidade_cpl = total_unidade_custo/total_unidade_resultados
 
 verba_restante = meta_facebook_mes - total_unidade_custo
 dias_para_o_fim_do_mes = days_until_end_of_month(month_filter)
+
 if dias_para_o_fim_do_mes:
   verba_restante_por_dia = verba_restante/dias_para_o_fim_do_mes
   verba_restante_por_dia = f"R$ {verba_restante_por_dia :.2f}"
