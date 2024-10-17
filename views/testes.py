@@ -6,6 +6,9 @@ from streamlit_gsheets import GSheetsConnection
 from datetime import datetime
 
 st.set_page_config(page_title="Testes", page_icon="💎",layout="wide")
+
+st.write("teste")
+
 # Sample dataframe with columns A and B, where column C is dependent on A and B
 data = {
     'A': [10, 20, 30],
