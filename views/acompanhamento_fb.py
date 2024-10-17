@@ -168,7 +168,7 @@ categoria_total_cpl = categoria_total_row['CPL'].values[0]
 categoria_groupby["share_custo"] = (categoria_groupby["Amount Spent"]/categoria_total_custo) * 100
 categoria_groupby["share_resultados"] = (categoria_groupby["Results"]/categoria_total_resultados) * 100
 
-categoria_groupby = pd.merge(categoria_groupby,df_metas_categoria_mes[["categoria","meta"]],how="left",left_on=["Categoria"],right_on=["categoria"])
+categoria_groupby = pd.merge(categoria_groupby,meta_categoria_fb[["categoria","meta"]],how="left",left_on=["Categoria"],right_on=["categoria"])
 
 categoria_groupby["verba total"] = meta_facebook_mes*categoria_groupby["meta"]
 categoria_groupby["verba restante"] = categoria_groupby["verba total"] - categoria_groupby["Amount Spent"]
