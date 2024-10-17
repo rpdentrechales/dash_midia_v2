@@ -65,7 +65,7 @@ df_unidades = load_aux_dataframe("Auxiliar - Unidades - FB","Campaign Name")
 df_whatsapp = load_aux_dataframe("Auxiliar - Whatsapp - FB","Ad Name")
 
 # Carrega os dados de meta
-df_metas_categoria = load_aux_dataframe("aux - Configurar metas categoria",["plataforma","month","categoria"])
+df_metas_categoria = load_aux_dataframe("aux - Configurar metas categoria",["plataforma","categoria","unidade"])
 df_metas_unidade = load_aux_dataframe("aux - Configurar metas unidade",["unidade","month"])
 
 # Padroniza as datas nos dataframes das metas
