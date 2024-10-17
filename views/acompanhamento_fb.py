@@ -180,10 +180,14 @@ else:
 
 colunas = ["categoria","meta","Amount Spent","Results","CPL","share_custo","share_resultados","verba total","verba restante","verba restante por dia"]
 
+colunas_fixas = ["categoria","Amount Spent","Results","CPL","share_custo","share_resultados","verba total","verba restante","verba restante por dia"]
+
 st.data_editor(
     categoria_groupby,
     use_container_width=True,
     column_order=colunas,
+    disabled=colunas_fixas,
+    hide_index=True,
     column_config={
         "meta": st.column_config.NumberColumn(
             "Meta",
@@ -234,5 +238,4 @@ st.data_editor(
             width="small"
         )
     }
-    ,hide_index = True
   )
