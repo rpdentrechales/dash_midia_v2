@@ -182,7 +182,7 @@ colunas = ["categoria","meta","Amount Spent","Results","CPL","share_custo","shar
 
 colunas_fixas = ["categoria","Amount Spent","Results","CPL","share_custo","share_resultados","verba total","verba restante","verba restante por dia"]
 
-st.data_editor(
+tabela_acompanhamento = st.data_editor(
     categoria_groupby,
     use_container_width=True,
     column_order=colunas,
@@ -239,3 +239,7 @@ st.data_editor(
         )
     }
   )
+
+meta = tabela_acompanhamento["meta"]
+
+st.write(meta)
