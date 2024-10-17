@@ -240,6 +240,6 @@ tabela_acompanhamento = st.data_editor(
     }
   )
 
-meta = tabela_acompanhamento["meta"]
+meta_updated = tabela_acompanhamento[["plataforma",'unidade',"meta"]]
 
-st.write(meta)
+st.write(meta_updated)
