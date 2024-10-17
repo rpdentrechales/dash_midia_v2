@@ -170,7 +170,7 @@ categoria_groupby["share_resultados"] = (categoria_groupby["Results"]/categoria_
 
 categoria_groupby = pd.merge(categoria_groupby,meta_categoria_fb[["categoria","meta"]],how="left",left_on=["Categoria"],right_on=["categoria"])
 
-categoria_groupby["verba total"] = meta_facebook_mes*categoria_groupby["meta"]
+categoria_groupby["verba total"] = meta_facebook_mes*categoria_groupby["meta"]/100
 categoria_groupby["verba restante"] = categoria_groupby["verba total"] - categoria_groupby["Amount Spent"]
 
 if dias_para_o_fim_do_mes:
@@ -186,8 +186,8 @@ st.dataframe(
     use_container_width=True,
     column_config={
         "meta": st.column_config.NumberColumn(
-            "Custo",
-            format="%.2f %",
+            "Meta",
+            format="%.2f %%",
             width="small"
         ),
         "Amount Spent": st.column_config.NumberColumn(
