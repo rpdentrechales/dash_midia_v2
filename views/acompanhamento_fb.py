@@ -244,6 +244,6 @@ meta_updated = tabela_acompanhamento[["categoria","meta"]]
 meta_updated["unidade"] = store_filter
 meta_updated["plataforma"] = "Facebook"
 
-df_categorias_updated = pd.concat(df_categorias,meta_updated)
+df_categorias_updated = pd.concat([df_categorias,meta_updated])
 st.write("TESTES")
 st.write(df_categorias_updated)
