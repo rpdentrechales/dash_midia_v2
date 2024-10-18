@@ -243,7 +243,7 @@ tabela_acompanhamento = st.data_editor(
   )
 
 
-if st.button("Atualizar Metas"):
+if st.button("Atualizar Metas",type="primary"):
 
   meta_updated = tabela_acompanhamento[["categoria","meta"]]
   meta_updated["unidade"] = store_filter
