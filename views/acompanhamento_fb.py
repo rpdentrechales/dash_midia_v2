@@ -254,4 +254,4 @@ if st.button("Atualizar Metas",type="primary"):
   df_metas_categorias_updated = update_sheet(df_metas_categorias_updated,"aux - Configurar metas categoria")
 
   st.session_state["df_meta_categoria"] = df_metas_categorias_updated
-  st.ballons
+  st.ballons()
