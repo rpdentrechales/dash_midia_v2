@@ -245,7 +245,10 @@ tabela_acompanhamento = st.data_editor(
 porcentagem_total = tabela_acompanhamento["meta"].sum()
 porcentagem_total = f"{porcentagem_total :.2f} %"
 
-st.warning(porcentagem_total, icon="⚠️")
+if (porcentagem_total == 100):
+  st.success(f'Total da meta: {porcentagem_total}', icon="✅")
+else:
+  st.warning(f'Total da meta: {porcentagem_total}', icon="⚠️")
 
 if st.button("Atualizar Metas",type="primary"):
 
