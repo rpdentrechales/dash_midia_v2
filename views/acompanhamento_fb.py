@@ -246,4 +246,4 @@ meta_updated["plataforma"] = "Facebook"
 
 df_metas_categorias_updated = pd.concat([df_metas_categoria,meta_updated])
 st.write("TESTES")
-st.write(df_categorias_updated)
+st.write(df_metas_categorias_updated)
