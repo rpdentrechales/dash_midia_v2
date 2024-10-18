@@ -7,11 +7,17 @@ acompanhamento_fb_page = st.Page(
     icon=":material/summarize:",
 )
 
-testes_page = st.Page(
-    "views/testes.py",
-    title="Testes",
+meta_unidade_page = st.Page(
+    "views/metas_unidade.py",
+    title="Metas por Unidade",
     icon=":material/summarize:",
 )
+
+# testes_page = st.Page(
+#     "views/testes.py",
+#     title="Testes",
+#     icon=":material/summarize:",
+# )
 
 
 # --- NAVIGATION SETUP [WITHOUT SECTIONS] ---
@@ -20,7 +26,7 @@ testes_page = st.Page(
 # --- NAVIGATION SETUP [WITH SECTIONS]---
 pg = st.navigation(
     {
-        "Acompanhamento": [acompanhamento_fb_page,testes_page],
+        "Acompanhamento": [acompanhamento_fb_page,meta_unidade_page],
     }
 )
 
