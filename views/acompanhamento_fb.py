@@ -242,7 +242,7 @@ tabela_acompanhamento = st.data_editor(
     }
   )
 
-porcentagem_total = categoria_groupby["meta"].sum()
+porcentagem_total = tabela_acompanhamento["meta"].sum()
 porcentagem_total = f"{porcentagem_total :.2f} %"
 
 st.write(porcentagem_total)
