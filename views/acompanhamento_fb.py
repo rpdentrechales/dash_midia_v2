@@ -48,8 +48,6 @@ def load_aux_dataframe(worksheet,duplicates_subset):
 def update_sheet(df,worksheet):
 
   conn = st.connection("gsheets", type=GSheetsConnection)
-  df = conn.read(worksheet=worksheet,dtype={"Ad ID": str})
-
   df = df.drop_duplicates(keep="last")
   conn.update(data=df,worksheet=worksheet)
 
