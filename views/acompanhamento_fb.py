@@ -63,7 +63,11 @@ df_unidades = load_aux_dataframe("Auxiliar - Unidades - FB","Campaign Name")
 df_whatsapp = load_aux_dataframe("Auxiliar - Whatsapp - FB","Ad Name")
 
 # Carrega os dados de meta
-df_metas_categoria = load_aux_dataframe("aux - Configurar metas categoria",["plataforma","categoria","unidade"])
+if "df_meta_categoria" in st.session_state:
+  df_metas_categoria = st.session_state["df_meta_categoria"]
+else:
+  df_metas_categoria = load_aux_dataframe("aux - Configurar metas categoria",["plataforma","categoria","unidade"])
+
 df_metas_unidade = load_aux_dataframe("aux - Configurar metas unidade",["unidade","month"])
 
 # Padroniza as datas nos dataframes das metas
@@ -238,12 +242,16 @@ tabela_acompanhamento = st.data_editor(
     }
   )
 
-meta_updated = tabela_acompanhamento[["categoria","meta"]]
-meta_updated["unidade"] = store_filter
-meta_updated["plataforma"] = "Facebook"
 
-df_metas_categorias_updated = pd.concat([df_metas_categoria,meta_updated])
-df_metas_categorias_updated = df_metas_categorias_updated.drop_duplicates(subset=["plataforma","unidade","categoria"],keep="last")
-# df_metas_categorias_updated = update_sheet(df_metas_categorias_updated,"aux - Configurar metas categoria")
-st.write("TESTES")
-st.write(df_metas_categorias_updated)
+if st.button("Atualizar Metas"):
+
+  meta_updated = tabela_acompanhamento[["categoria","meta"]]
+  meta_updated["unidade"] = store_filter
+  meta_updated["plataforma"] = "Facebook"
+
+  df_metas_categorias_updated = pd.concat([df_metas_categoria,meta_updated])
+  df_metas_categorias_updated = df_metas_categorias_updated.drop_duplicates(subset=["plataforma","unidade","categoria"],keep="last")
+  df_metas_categorias_updated = update_sheet(df_metas_categorias_updated,"aux - Configurar metas categoria")
+
+  st.session_state["df_meta_categoria"] = df_metas_categorias_updated
+  st.ballons
