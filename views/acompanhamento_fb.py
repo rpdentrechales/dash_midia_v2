@@ -245,5 +245,7 @@ meta_updated["unidade"] = store_filter
 meta_updated["plataforma"] = "Facebook"
 
 df_metas_categorias_updated = pd.concat([df_metas_categoria,meta_updated])
+df_metas_categorias_updated = df_metas_categorias_updated.drop_duplicates(subset=["plataforma","unidade","categoria"],keep="last")
+# df_metas_categorias_updated = update_sheet(df_metas_categorias_updated,"aux - Configurar metas categoria")
 st.write("TESTES")
 st.write(df_metas_categorias_updated)
